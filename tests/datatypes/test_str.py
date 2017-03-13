@@ -69,13 +69,42 @@ class StrTests(TranspileTestCase):
             """)
 
         self.assertCodeExecution("""
-            print('abracadabra'.endswith('abra'))
+            print('abracadabra'.endswith('abra',0,5))
             """)
 
         self.assertCodeExecution("""
             s = "ABRACADABRA"
             suffix = ""
-            print(s.endswith(suffix))
+            print(s.endswith(suffix,3))
+            """)
+
+    def test_startswith(self):
+        self.assertCodeExecution("""
+            s = "abracadabra"
+            suffix = "abra"
+            print(s.startswith(suffix))
+            """)
+
+        self.assertCodeExecution("""
+            s = "abracadabra"
+            suffix = "ABRA"
+            print(s.startswith(suffix))
+            """)
+
+        self.assertCodeExecution("""
+            s = "ABRACADABRA"
+            suffix = "abra"
+            print(s.startswith(suffix))
+            """)
+
+        self.assertCodeExecution("""
+            print('abracadabra'.startswith('abra',0,5))
+            """)
+
+        self.assertCodeExecution("""
+            s = "ABRACADABRA"
+            suffix = ""
+            print(s.startswith(suffix,3))
             """)
 
     def test_getattr(self):
@@ -356,6 +385,20 @@ class StrTests(TranspileTestCase):
                 print(err)
                 """)
 
+    def test_partition(self):
+        self.assertCodeExecution("""
+            s = "foobar"
+            print(s.partition("ob"))
+            print(s.partition("o"))
+            print(s.partition("f"))
+            print(s.partition("r"))
+            print(s.partition("x"))
+            try:
+                print(s.partition(""))
+            except ValueError as err:
+                print(err)
+            """)
+
 
 class UnaryStrOperationTests(UnaryOperationTestCase, TranspileTestCase):
     data_type = 'str'
@@ -373,6 +416,20 @@ class BinaryStrOperationTests(BinaryOperationTestCase, TranspileTestCase):
 
         'test_and_class',
         'test_and_frozenset',
+
+        'test_direct_eq_bytes',
+        'test_direct_ge_bytes',
+        'test_direct_gt_bytes',
+        'test_direct_le_bytes',
+        'test_direct_lt_bytes',
+        'test_direct_ne_bytes',
+
+        'test_direct_eq_frozenset',
+        'test_direct_ge_frozenset',
+        'test_direct_gt_frozenset',
+        'test_direct_le_frozenset',
+        'test_direct_lt_frozenset',
+        'test_direct_ne_frozenset',
 
         'test_eq_class',
         'test_eq_frozenset',
