@@ -25,9 +25,9 @@ class testing(ast.NodeTransformer):
                         # ast.MatMult:
                     }[type(node.op)]
             attr2 = ast.Attribute(value=node.left,attr=attr,ctx=ast.Load())
-            node.func = attr2
-            node.args = [node.right]
-            node.keywords = []
+#             node.func = attr2
+#             node.args = [node.right]
+#             node.keywords = []
             node2 = ast.Call(func=attr2,args=[node.right],keywords=[])
             node2 = ast.copy_location(node2,node)
             node2 = ast.fix_missing_locations(node2)
