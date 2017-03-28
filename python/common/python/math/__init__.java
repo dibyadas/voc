@@ -30,20 +30,49 @@ public static Object pi = new Float(Math.PI);
 @org.python.Attribute
 public static Object e = new Float(Math.E);
 
+
+
+public static double tofloatvalue(Object v){
+	if(v instanceof Float){
+		return ((Float)v).value;
+	}
+	else if (v instanceof Int) {
+		return (new Float(((Int)v).value)).value;		
+	} 
+	else {
+		throw new TypeError("a float is required");
+	}
+}
+
+
+private static boolean exceptNaN(double result, double arg){
+        if (Double.isNaN(result) && !Double.isNaN(arg)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+private static boolean exceptInf(double result, double arg) {
+        if (Double.isInfinite(result) && !Double.isInfinite(arg)) {
+            return true;
+        } else {
+            return false;
+        }
+}
+
+
+
+
 @org.python.Method(
 	__doc__="",
 	args = {"v"}
 )
   public static Object expm1(Object v) {
         
-        double result = 0.0;
-        if (v instanceof Float) {
-        result = Math.expm1(((Float)v).value);
-    }
-    else if(v instanceof Int){
-      result = Math.expm1((new Float(((Int)v).value)).value);
-    }
-     return (new Float(result));
+       double result = 0.0;
+       result = Math.expm1(tofloatvalue(v));
+       return (new Float(result));
     }
 
 @org.python.Method(
@@ -51,35 +80,15 @@ public static Object e = new Float(Math.E);
 	args = {"v"}
 )
 public static Object acos(Object v) {
- 
-
-		    if(v instanceof Float){
-
-		    	Float r = new Float(Math.acos(((Float)v).value));
-		    	if(Double.isNaN(r.value)){
+		    Float r = new Float(Math.acos(tofloatvalue(v)));
+		    if(Double.isNaN(r.value)){
 	    		throw new ValueError("math domain error");
 	    	}
 	    	else{
 	    		return r;
 	    	}
-	    	}
-	   	 else if(v instanceof Int) 
-	  	  {
-	  	  	Float r = new Float(Math.acos(((Int)v).value));
-	  	  	if(Double.isNaN(r.value)){
-	    		throw new ValueError("math domain error");
-	    	}
-	    	else{
-	    		return r;
-	    	}
-
 	    }
 
-		 
-	    else {
-	    	throw new TypeError("a float is required");
-	    }
-}
 
 @org.python.Method(
 	__doc__="",
@@ -87,31 +96,13 @@ public static Object acos(Object v) {
 )
 public static Object asin(Object v) {
         
-
-	    if(v instanceof Float){
-	    	Float r = new Float(Math.asin(((Float)v).value));
+	  		Float r = new Float(Math.asin(tofloatvalue(v)));
 	    	if(Double.isNaN(r.value)){
 	    		throw new ValueError("math domain error");
 	    	}
 	    	else{
 	    		return r;
 	    	}
-
-	    }
-	    else if(v instanceof Int) 
-	    {
-	    	Float r =  new Float(Math.asin(((Int)v).value));
-	    	if(Double.isNaN(r.value)){
-	    		throw new ValueError("math domain error");
-	    	}
-	    	else{
-	    		return r;
-	    	}
-
-	    }
-	    else {
-	    	throw new TypeError("a float is required");
-	    }
   }
 
 
@@ -121,44 +112,141 @@ public static Object asin(Object v) {
 )
 public static Object atan(Object v) {
 
-        if(v instanceof Float){
-	    	Float r = new Float(Math.atan(((Float)v).value));
+	    	Float r = new Float(Math.atan(tofloatvalue(v)));
 	    	if(Double.isNaN(r.value)){
 	    		throw new ValueError("math domain error");
 	    	}
 	    	else{
 	    		return r;
 	    	}
+ }
 
-	    }
-	    else if(v instanceof Int) 
-	    {
-	    	Float r =  new Float(Math.atan(((Int)v).value));
-	    	if(Double.isNaN(r.value)){
-	    		throw new ValueError("math domain error");
-	    	}
-	    	else{
-	    		return r;
-	    	}
-
-	    }
-	    else {
-	    	throw new TypeError("a float is required");
-	    }
-
+@org.python.Method(
+	__doc__="",
+	args = {"v","w"}
+)
+public static Object atan2(Object v, Object w) {
+        return new Float(Math.atan2(tofloatvalue(v), tofloatvalue(w)));
     }
 
 @org.python.Method(
 	__doc__="",
 	args = {"v"}
 )
-public static Object atan2(Object v, Object w) {
+public static Object ceil(Object v) {
+        return new Int((int)Math.ceil(tofloatvalue(v)));
+   }
 
-	if(!(v instanceof Float))
-        if(v instanceof Float && w instanceof Float){
-        return Math.atan2(v, w);
+@org.python.Method(
+	__doc__="",
+	args = {"v"}
+)
+public static Object cos(Object v) {
+		double r = Math.cos(tofloatvalue(v));
+        if(exceptNaN(r,tofloatvalue(v))) {
+        	throw new ValueError("math domain error");
+        }
+        else {
+        	return new Float(r);
+        }
+
+ }
+
+@org.python.Method(
+	__doc__="",
+	args = {"v"}
+)
+public static Object exp(Object v) {
+	  double r = Math.exp(tofloatvalue(v));
+        if(exceptInf(r,tofloatvalue(v))) {
+        	throw new ValueError("math domain error");
+        }
+        else{
+        	return new Float(r);
+        }
     }
 
+@org.python.Method(
+	__doc__="",
+	args = {"v"}
+)
+public static Object floor(Object v) {
+        return  new Int((int)Math.floor(tofloatvalue(v)));
+ }
+
+// @org.python.Method(
+// 	__doc__="",
+// 	args = {"v"}
+// )
+// public static Object log(Object v) {
+//         return log(v, null);
+//     }
+
+
+@org.python.Method(
+	__doc__="",
+	args = {"v"},
+	default_args = {"base"}
+)
+public static Object log(Object v, Object base) {
+	double b = 0.0;
+		if(base instanceof Float || base instanceof Int)
+			 b = tofloatvalue(base);
+		else if(base == null){
+			 b = 0.0;
+		}
+        double doubleValue;
+        doubleValue = log(tofloatvalue(v));
+        return (b == 0.0) ? new Float(doubleValue)  : new Float(applyLoggedBase(doubleValue, b));
+    }
+
+private static double log(double v) {
+        if (v <= 0.) {
+            throw new ValueError("math domain error");
+        } else {
+            return Math.log(v);
+        }
+    }    
+
+
+private static double applyLoggedBase(double loggedValue, double base) {
+
+        double loggedBase;
+        loggedBase = log(base);
+        return loggedValue / loggedBase;
+    }
+
+@org.python.Method(
+	__doc__="",
+	args = {"v"}
+)
+public static Object log10(Object v) {
+       if (tofloatvalue(v) <= 0.) {
+           throw new ValueError("math domain error");
+        } else {
+            return new Float(Math.log10(tofloatvalue(v)));
+        }
+    }
+
+@org.python.Method(
+	__doc__="",
+	args = {"v"}
+)
+public static Object log2(Object v) {
+       if (tofloatvalue(v) <= 0.) {
+           throw new ValueError("math domain error");
+        } else {
+            return log(v,new Float(2));
+        }
+    }
+
+@org.python.Method(
+	__doc__="",
+	args = {"v","w"}
+)
+public static Object copysign(Object v, Object w) {
+        return new Float(Math.copySign(tofloatvalue(v),tofloatvalue(w)));
+    }
 
 
 }
