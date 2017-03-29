@@ -2,11 +2,6 @@ package python.math;
 
 import java.util.*;
 import java.math.BigInteger;
-
-//import org.python.types.ClassDictInit;
-//import org.python.types.Py;
-//import org.python.types.PyException;
-//import org.python.types.PyFloat;
 import org.python.types.Int;
 import org.python.types.Float;
 import org.python.types.Tuple;
@@ -17,8 +12,6 @@ import org.python.Object;
 import org.python.exceptions.ValueError;
 import org.python.exceptions.TypeError;
 import org.python.exceptions.OverflowError;
-//import org.python.types.PyTuple;
-//import org.python.types.__builtin__;
 
 @org.python.Module(
 
