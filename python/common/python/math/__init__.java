@@ -43,20 +43,10 @@ public class __init__ extends org.python.types.Module {
 
 
     private static boolean exceptNaN(double result, double arg) {
-        // if (Double.isNaN(result) && !Double.isNaN(arg)) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
         return (Double.isNaN(result) && !Double.isNaN(arg));
     }
 
     private static boolean exceptInf(double result, double arg) {
-        // if (Double.isInfinite(result) && !Double.isInfinite(arg)) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
         return (Double.isInfinite(result) && !Double.isInfinite(arg));
     }
 
@@ -136,7 +126,6 @@ public class __init__ extends org.python.types.Module {
             return r;
         }
     }
-
 
 
 
@@ -223,10 +212,6 @@ public class __init__ extends org.python.types.Module {
     }
 
 
-    //    public static double atan(double v) {
-    //        return exceptNaN(Math.atan(v), v);
-    // }
-
 
 
     @org.python.Method(
@@ -268,7 +253,6 @@ public class __init__ extends org.python.types.Module {
         if (absy >= 1.0) {
             throw new ValueError("math domain error");
         } else {
-            // 2x = ln[(1+y)/(1-y)] = ln[1 + 2y/(1-y)]
             double u = (absy + absy) / (1. - absy);
             double x = 0.5 * Math.log1p(u);
             return new Float(Math.copySign(x, tofloatvalue(v)));
@@ -327,6 +311,49 @@ public class __init__ extends org.python.types.Module {
         }
 
     }
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {
+            "arg"
+            }
+    )
+    public static Object cosh(Object arg) {
+        double v = tofloatvalue(arg);
+        if (exceptInf(Math.cosh(v), v)) {
+            throw new OverflowError("math range error");
+        }
+        return new Float(Math.cosh(v));
+    }
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {
+            "arg"
+            }
+    )
+    public static Object sinh(Object arg) {
+        double v = tofloatvalue(arg);
+        if (exceptInf(Math.sinh(v), v)) {
+            throw new OverflowError("math range error");
+        }
+        return new Float(Math.sinh(v));
+    }
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {
+            "arg"
+            }
+    )
+    public static Object tanh(Object arg) {
+        double v = tofloatvalue(arg);
+        if (exceptInf(Math.tanh(v), v)) {
+            throw new OverflowError("math range error");
+        }
+        return new Float(Math.tanh(v));
+    }
+
 
     @org.python.Method(
             __doc__ = "",
