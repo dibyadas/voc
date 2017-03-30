@@ -1,6 +1,7 @@
 package python.math;
 
 import java.math.BigInteger;
+import java.math.BigDecimal;
 import org.python.types.Int;
 import org.python.types.Float;
 import org.python.types.Tuple;
@@ -281,9 +282,10 @@ public class __init__ extends org.python.types.Module {
             "v"
             }
     )
-    public static Object fsum(Object v) { //work in progress
+    public static Object fsum(Object v) {
         if (!(v instanceof Tuple) && !(v instanceof List)) {
-            throw new ValueError("'" + ((org.python.types.Object)v).__class__ + "' Object not iterable");
+            String err = new String(((org.python.types.Object) v).__class__.toString());
+            throw new ValueError("'" + err + "' object not iterable");
         } else {
             java.util.List l;
             if (v instanceof Tuple) {
@@ -291,17 +293,12 @@ public class __init__ extends org.python.types.Module {
             } else {
                 l = new java.util.ArrayList<Object>(((List) v).value);
             }
-
-            double sum = 0.0;
-            for (int i = 0; i < 3; i++) {
-
-                sum += ((Float) l.get(i)).value;
+            BigDecimal sum = new BigDecimal(0);
+            for (int i = 0; i < l.size(); i++) {
+                BigDecimal t = new BigDecimal(tofloatvalue(((Object) l.get(i))));
+                sum = sum.add(t);
             }
-            // for (Object i : l) {
-            //   double t = tofloatvalue(i);
-            //   sum += t;
-            // }
-            return new Float(sum);
+            return new Float(sum.doubleValue());
         }
     }
 
