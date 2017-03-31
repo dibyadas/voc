@@ -529,12 +529,12 @@ class MathTests(TranspileTestCase):
                 print(err)
             """)
 
-    def test_inf(self):
-        self.assertCodeExecution("""
-            import math
-            x = math.inf
-            print(x)
-            """)
+    # def test_inf(self):
+    #     self.assertCodeExecution("""
+    #         import math
+    #         x = math.inf
+    #         print(x)
+    #         """)
 
     def test_isfinite(self):
         self.assertCodeExecution("""
