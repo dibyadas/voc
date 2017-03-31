@@ -26,7 +26,10 @@ public class __init__ extends org.python.types.Module {
     public static Object pi = new Float(Math.PI);
     @org.python.Attribute
     public static Object e = new Float(Math.E);
-
+    @org.python.Attribute
+    public static Object inf = new Float(Double.POSITIVE_INFINITY);
+    @org.python.Attribute
+    public static Object nan = new Float(Double.NaN);
 
 
 
@@ -109,7 +112,11 @@ public class __init__ extends org.python.types.Module {
 
         double result = 0.0;
         result = Math.expm1(tofloatvalue(v));
-        return (new Float(result));
+        if (Double.isInfinite(result)) {
+            throw new OverflowError("math range error");
+        } else {
+            return new Float(result);
+        }
     }
 
     @org.python.Method(
@@ -127,6 +134,20 @@ public class __init__ extends org.python.types.Module {
         }
     }
 
+    @org.python.Method(
+            __doc__ = "",
+            args = {
+            "arg"
+            }
+    )
+    public static Object cos(Object arg) {
+        double v = tofloatvalue(arg);
+        if (exceptNaN(Math.cos(v), v)) {
+            throw new ValueError("math domain error");
+        } else {
+            return new Float(Math.cos(v));
+        }
+    }
 
 
     @org.python.Method(
@@ -212,6 +233,20 @@ public class __init__ extends org.python.types.Module {
     }
 
 
+    @org.python.Method(
+            __doc__ = "",
+            args = {
+            "arg"
+            }
+    )
+    public static Object sin(Object arg) {
+        double v = tofloatvalue(arg);
+        if (exceptNaN(Math.sin(v), v)) {
+            throw new ValueError("math domain error");
+        } else {
+            return new Float(Math.sin(v));
+        }
+    }
 
 
     @org.python.Method(
@@ -238,7 +273,7 @@ public class __init__ extends org.python.types.Module {
             }
     )
     public static Object atan2(Object v, Object w) {
-        return new Float(Math.atan2(tofloatvalue(v), tofloatvalue(w)));
+        return new Float(Math.atan(tofloatvalue(v) / tofloatvalue(w)));
     }
 
 
@@ -263,12 +298,28 @@ public class __init__ extends org.python.types.Module {
     @org.python.Method(
             __doc__ = "",
             args = {
+            "arg"
+            }
+    )
+    public static Object tan(Object arg) {
+        double v = tofloatvalue(arg);
+        if (exceptNaN(Math.tan(v), v)) {
+            throw new ValueError("math domain error");
+        } else {
+            return new Float(Math.tan(v));
+        }
+    }
+
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {
             "v"
             }
     )
     public static Object fsum(Object v) {
         if (!(v instanceof Tuple) && !(v instanceof List)) {
-            String err = new String(((org.python.types.Object) v).__class__.toString());
+            String err = new String(((org.python.types.Object) v).__class__.PYTHON_TYPE_NAME);
             throw new ValueError("'" + err + "' object not iterable");
         } else {
             java.util.List l;
@@ -296,21 +347,6 @@ public class __init__ extends org.python.types.Module {
         return new Int((int) Math.ceil(tofloatvalue(v)));
     }
 
-    @org.python.Method(
-            __doc__ = "",
-            args = {
-            "v"
-            }
-    )
-    public static Object cos(Object v) {
-        double r = Math.cos(tofloatvalue(v));
-        if (exceptNaN(r, tofloatvalue(v))) {
-            throw new ValueError("math domain error");
-        } else {
-            return new Float(r);
-        }
-
-    }
 
     @org.python.Method(
             __doc__ = "",
@@ -379,8 +415,8 @@ public class __init__ extends org.python.types.Module {
             }
     )
     public static Object gcd(Object arg1, Object arg2) {
-        if ((arg1 instanceof Float) || (arg2 instanceof Float)) {
-            throw new TypeError("'float' object cannot be interpreted as an integer");
+        if (!(arg1 instanceof Int) && !(arg2 instanceof Int)) {
+            throw new TypeError("'" + ((org.python.types.Object) arg1).__class__.PYTHON_TYPE_NAME + " object cannot be interpreted as an integer");
         } else {
             long m = Math.abs(((Int) arg1).value);
             long n = Math.abs(((Int) arg2).value);
@@ -592,7 +628,11 @@ public class __init__ extends org.python.types.Module {
         r -= w;
         java.util.List temp = new java.util.ArrayList<Object>();
         temp.add(new Float(w));
-        temp.add(new Float(r));
+        if (r == -0d) {
+            temp.add(new Float(-r));
+        } else {
+            temp.add(new Float(r));
+        }
         return new Tuple(temp);
     }
 
@@ -644,7 +684,12 @@ public class __init__ extends org.python.types.Module {
     )
     public static Object ldexp(Object v, Object wObj) {
         double r = tofloatvalue(v);
-        double w = tofloatvalue(wObj);
+        double w = 0.0;
+        if (!(wObj instanceof Int)) {
+            throw new TypeError("Expected an int as second argument to ldexp.");
+        } else {
+            w = tofloatvalue(wObj);
+        }
         if (w < Integer.MIN_VALUE) {
             w = Integer.MIN_VALUE;
         } else if (w > Integer.MAX_VALUE) {
@@ -705,8 +750,19 @@ public class __init__ extends org.python.types.Module {
             }
     )
     public static Object factorial(Object arg) {
-        double v = tofloatvalue(arg);
-        if (v == 0.0 || v == 1.0) {
+        double v = 0.0;
+        if (arg instanceof Float) {
+            v = ((Float) arg).value;
+        } else if (arg instanceof Int) {
+            v = (new Float(((Int) arg).value)).value;
+        } else {
+            throw new TypeError("an integer is required");
+        }
+        if ((v - ((int) v)) != 0.0) {
+            throw new ValueError("factorial() only accepts integral values");
+        } else if (v <= 0.0) {
+            throw new ValueError("factorial() not defined for negative values");
+        } else if (v == 0.0 || v == 1.0) {
             return new Float(1);
         } else if (v < 0.0 || isnan(v) || isinf(v)) {
             throw new ValueError("math domain error");
@@ -721,6 +777,18 @@ public class __init__ extends org.python.types.Module {
             return new Int(bi.intValue());
         }
     }
+
+    /*@org.python.Method(
+            __doc__ = "",
+            args = {
+            "arg"
+            }
+    )
+    public static Object trunc(Object arg) {
+        return arg.__trunc__();
+    }*/
+
+
 
 
 
