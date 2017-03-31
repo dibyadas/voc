@@ -28,8 +28,8 @@ public class __init__ extends org.python.types.Module {
     public static Object e = new Float(Math.E);
     // @org.python.Attribute
     // public static Object inf = new Float(Double.POSITIVE_INFINITY);
-    @org.python.Attribute
-    public static Object nan = new Float(Double.NaN);
+    // @org.python.Attribute
+    // public static Object nan = new Float(Double.NaN);
 
 
 

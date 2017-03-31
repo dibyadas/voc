@@ -759,12 +759,12 @@ class MathTests(TranspileTestCase):
                 print(err)
             """)
 
-    def test_nan(self):
-        self.assertCodeExecution("""
-            import math
-            x = math.nan
-            print(x)
-            """)
+    # def test_nan(self):
+    #     self.assertCodeExecution("""
+    #         import math
+    #         x = math.nan
+    #         print(x)
+    #         """)
 
     def test_pi(self):
         self.assertCodeExecution("""
