@@ -495,8 +495,12 @@ class MathTests(TranspileTestCase):
     def test_gcd(self):
         self.assertCodeExecution("""
             import math
-            x = math.gcd(24,34)
-            print(x)
+            try:
+                x = math.gcd(24,34)
+            except AttributeError as err:
+                print(err)
+            else:
+                print(x)
             """)
 
         # self.assertCodeExecution("""
