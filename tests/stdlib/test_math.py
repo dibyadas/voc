@@ -503,21 +503,25 @@ class MathTests(TranspileTestCase):
                 print(x)
             """)
 
-        # self.assertCodeExecution("""
-        #     import math
-        #     try:
-        #         x = math.gcd(2.3,13)
-        #     except TypeError as err:
-        #         print(err)
-        #     """)
+        self.assertCodeExecution("""
+            import math
+            try:
+                x = math.gcd(2.3,13)
+            except TypeError as err:
+                print(err)
+            except AttributeError as err:
+                print(err)
+            """)
 
-        # self.assertCodeExecution("""
-        #     import math
-        #     try:
-        #         x = math.gcd("33f",34)
-        #     except TypeError as err:
-        #         print(err)
-        #     """)
+        self.assertCodeExecution("""
+            import math
+            try:
+                x = math.gcd("33f",34)
+            except TypeError as err:
+                print(err)
+            except AttributeError as err:
+                print(err)
+            """)
 
     def test_hypot(self):
         self.assertCodeExecution("""
