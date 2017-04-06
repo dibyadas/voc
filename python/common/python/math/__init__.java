@@ -39,7 +39,11 @@ public class __init__ extends org.python.types.Module {
         } else if (v instanceof Int) {
             return (new Float(((Int) v).value)).value;
         } else {
-            throw new TypeError("a float is required");
+            if (org.Python.VERSION < 0x03060000) {
+                throw new TypeError("a float is required");
+            } else {
+                throw new TypeError("must be real number, not " + v.typeName());
+            }
         }
     }
 
@@ -318,9 +322,11 @@ public class __init__ extends org.python.types.Module {
             }
     )
     public static Object fsum(Object v) {
+        if (v instanceof org.python.types.Str) {
+            tofloatvalue(v);
+        }
         if (!(v instanceof Tuple) && !(v instanceof List)) {
-            String err = new String(((org.python.types.Object) v).__class__.PYTHON_TYPE_NAME);
-            throw new ValueError("'" + err + "' object not iterable");
+            throw new TypeError("'" + v.typeName() + "' object is not iterable");
         } else {
             java.util.List l;
             if (v instanceof Tuple) {
@@ -415,19 +421,23 @@ public class __init__ extends org.python.types.Module {
             }
     )
     public static Object gcd(Object arg1, Object arg2) {
-        if (!(arg1 instanceof Int) && !(arg2 instanceof Int)) {
-            throw new TypeError("'" + ((org.python.types.Object) arg1).__class__.PYTHON_TYPE_NAME + " object cannot be interpreted as an integer");
+        if (org.Python.VERSION < 0x03040000) {
+            throw new org.python.exceptions.AttributeError("'module' object has no attribute 'gcd'");
         } else {
-            long m = Math.abs(((Int) arg1).value);
-            long n = Math.abs(((Int) arg2).value);
-            long h = 1;
-            long p = m * n;
-            for (long i = 2; i < p; i++) {
-                if ((m % i == 0) && (n % i == 0)) {
-                    h = i;
+            if (!(arg1 instanceof Int) && !(arg2 instanceof Int)) {
+                throw new TypeError("'" + ((org.python.types.Object) arg1).__class__.PYTHON_TYPE_NAME + " object cannot be interpreted as an integer");
+            } else {
+                long m = Math.abs(((Int) arg1).value);
+                long n = Math.abs(((Int) arg2).value);
+                long h = 1;
+                long p = m * n;
+                for (long i = 2; i < p; i++) {
+                    if ((m % i == 0) && (n % i == 0)) {
+                        h = i;
+                    }
                 }
+                return new Int(h);
             }
-            return new Int(h);
         }
     }
 

@@ -457,7 +457,14 @@ class MathTests(TranspileTestCase):
         self.assertCodeExecution("""
             import math
             try:
-                x = math.floor("33f")
+                x = math.fsum("33f")
+            except TypeError as err:
+                print(err)
+            """)
+        self.assertCodeExecution("""
+            import math
+            try:
+                x = math.fsum(3)
             except TypeError as err:
                 print(err)
             """)
