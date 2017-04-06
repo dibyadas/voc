@@ -421,11 +421,13 @@ public class __init__ extends org.python.types.Module {
             }
     )
     public static Object gcd(Object arg1, Object arg2) {
-        if (org.Python.VERSION < 0x03040000) {
+        if (org.Python.VERSION < 0x03050000) {
             throw new org.python.exceptions.AttributeError("'module' object has no attribute 'gcd'");
         } else {
-            if (!(arg1 instanceof Int) && !(arg2 instanceof Int)) {
-                throw new TypeError("'" + ((org.python.types.Object) arg1).__class__.PYTHON_TYPE_NAME + " object cannot be interpreted as an integer");
+            if (!(arg1 instanceof Int)) {
+                throw new TypeError("'" + arg1.typeName() + "' object cannot be interpreted as an integer");
+            } else if (!(arg2 instanceof Int)) {
+                throw new TypeError("'" + arg2.typeName() + "' object cannot be interpreted as an integer");
             } else {
                 long m = Math.abs(((Int) arg1).value);
                 long n = Math.abs(((Int) arg2).value);
