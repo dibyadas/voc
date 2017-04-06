@@ -421,7 +421,7 @@ public class __init__ extends org.python.types.Module {
             }
     )
     public static Object gcd(Object arg1, Object arg2) {
-        if (org.Python.VERSION < 0x03040000) {
+        if (org.Python.VERSION < 0x03050000) {
             throw new org.python.exceptions.AttributeError("'module' object has no attribute 'gcd'");
         } else {
             if (!(arg1 instanceof Int) && !(arg2 instanceof Int)) {
