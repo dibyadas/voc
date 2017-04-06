@@ -15,4 +15,4 @@ install:
   - "pip install git+https://github.com/pybee/pytest-circleci"
   - "pip install flake8"
 script:
-  - python setup.py test -s tests.stdlib.test_math
+  - python setup.py test -s tests/stdlib/test_math.py
