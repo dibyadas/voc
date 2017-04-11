@@ -302,17 +302,22 @@ public class __init__ extends org.python.types.Module {
             args = {"v"}
     )
     public static org.python.Object ceil(org.python.Object v) {
-        //if (v instanceof org.python.types.Int || v instanceof org.python.types.Float){
-        return new org.python.types.Int((int) Math.ceil(toFloatValue(v)));
-        // } else {
-        //     try {
-        //         org.python.Object[] args = new org.python.Object[1];
-        //         java.util.Map<java.lang.String, org.python.Object> kwargs = new java.util.HashMap<java.lang.String, org.python.Object>();
-        //         return ((org.python.Object)v).invoke();
-        //     } catch (NoSuchMethodException e){
-        //         toFloatValue(v);
-        //     }
-        // }
+        if (v instanceof org.python.types.Int || v instanceof org.python.types.Float) {
+            return new org.python.types.Int((int) Math.ceil(toFloatValue(v)));
+        } else {
+            try {
+                org.python.Object[] args = new org.python.Object[1];
+                java.util.Map<java.lang.String, org.python.Object> kwargs = new java.util.HashMap<java.lang.String, org.python.Object>();
+                org.python.Object oper = v.__getattribute__("__ceil__");
+                return (org.python.Object) ((org.python.types.Method) oper).invoke(args, kwargs);
+            } catch (org.python.exceptions.AttributeError e) {
+                if (org.Python.VERSION < 0x03060000) {
+                    throw new org.python.exceptions.TypeError("a float is required");
+                } else {
+                    throw new org.python.exceptions.TypeError("must be real number, not " + v.typeName());
+                }
+            }
+        }
     }
 
 
@@ -444,7 +449,22 @@ public class __init__ extends org.python.types.Module {
             args = {"v"}
     )
     public static org.python.Object floor(org.python.Object v) {
-        return new org.python.types.Int((int) Math.floor(toFloatValue(v)));
+        if (v instanceof org.python.types.Int || v instanceof org.python.types.Float) {
+            return new org.python.types.Int((int) Math.floor(toFloatValue(v)));
+        } else {
+            try {
+                org.python.Object[] args = new org.python.Object[1];
+                java.util.Map<java.lang.String, org.python.Object> kwargs = new java.util.HashMap<java.lang.String, org.python.Object>();
+                org.python.Object oper = v.__getattribute__("__floor__");
+                return (org.python.Object) ((org.python.types.Method) oper).invoke(args, kwargs);
+            } catch (org.python.exceptions.AttributeError e) {
+                if (org.Python.VERSION < 0x03060000) {
+                    throw new org.python.exceptions.TypeError("a float is required");
+                } else {
+                    throw new org.python.exceptions.TypeError("must be real number, not " + v.typeName());
+                }
+            }
+        }
     }
 
 
@@ -608,7 +628,7 @@ public class __init__ extends org.python.types.Module {
         }
         java.util.List temp = new java.util.ArrayList<org.python.Object>();
         temp.add(new org.python.types.Float(mantissa));
-        temp.add(new org.python.types.Float(exponent));
+        temp.add(new org.python.types.Int((int) exponent));
         return new org.python.types.Tuple(temp);
     }
 
@@ -681,7 +701,7 @@ public class __init__ extends org.python.types.Module {
         } else if (arg instanceof org.python.types.Int) {
             v = (new org.python.types.Float(((org.python.types.Int) arg).value)).value;
         } else {
-            throw new org.python.exceptions.TypeError("an integer is required");
+            throw new org.python.exceptions.TypeError("an integer is required (got type "+ arg.typeName() + ")");
         }
         if ((v - ((int) v)) != 0.0) {
             throw new org.python.exceptions.ValueError("factorial() only accepts integral values");
@@ -696,8 +716,8 @@ public class __init__ extends org.python.types.Module {
         } else {
             long value = (long) v;
             BigInteger bi = new BigInteger(Long.toString(value));
-            for (long l = value - 1; l > 1; l--) {
-                bi = bi.multiply(new BigInteger(Long.toString(l)));
+            for (long l = value - 1; l > 1; l--) {         // this implementation doesn't work for large numbers
+                bi = bi.multiply(new BigInteger(Long.toString(l)));  // this needs work
             }
             return new org.python.types.Int(bi.intValue());
         }
