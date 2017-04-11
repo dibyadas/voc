@@ -1,8 +1,5 @@
 package python.gammafunction;
 
-import org.python.exceptions.OverflowError;
-import org.python.exceptions.ValueError;
-
 
 public class math_gamma {
     static final double pi = 3.141592653589793238462643383279502884197;
@@ -120,16 +117,16 @@ public class math_gamma {
                 return x;
             }
 
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         }
 
         if (x == 0.0) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         }
 
         if (x == Math.floor(x)) {
             if (x < 0.0) {
-                throw new ValueError("math domain error");
+                throw new org.python.exceptions.ValueError("math domain error");
             }
 
             if (x <= NGAMMA_INTEGRAL) {
@@ -143,7 +140,7 @@ public class math_gamma {
             r = 1.0 / x;
 
             if (Double.isInfinite(r)) {
-                throw new OverflowError("math range error");
+                throw new org.python.exceptions.OverflowError("math range error");
             }
 
             return r;
@@ -153,7 +150,7 @@ public class math_gamma {
             if (x < 0.0) {
                 return 0.0 / sinpi(x);
             } else {
-                throw new OverflowError("math range error");
+                throw new org.python.exceptions.OverflowError("math range error");
             }
         }
 
@@ -194,7 +191,7 @@ public class math_gamma {
         }
 
         if (Double.isInfinite(r)) {
-            throw new OverflowError("math range error");
+            throw new org.python.exceptions.OverflowError("math range error");
         }
 
         return r;
@@ -214,7 +211,7 @@ public class math_gamma {
 
         if ((x == Math.floor(x)) && (x <= 2.0)) {
             if (x <= 0.0) {
-                throw new ValueError("math domain error");
+                throw new org.python.exceptions.ValueError("math domain error");
             } else {
                 return 0.0;
             }
@@ -237,7 +234,7 @@ public class math_gamma {
         }
 
         if (Double.isInfinite(r)) {
-            throw new OverflowError("math range error");
+            throw new org.python.exceptions.OverflowError("math range error");
         }
 
         return r;

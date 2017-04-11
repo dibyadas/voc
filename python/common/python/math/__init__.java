@@ -2,17 +2,8 @@ package python.math;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
-import org.python.types.Int;
-import org.python.types.Float;
-import org.python.types.Tuple;
-import org.python.types.List;
-import org.python.types.Bool;
 import python.errorfunction.math_erf;
 import python.gammafunction.math_gamma;
-import org.python.Object;
-import org.python.exceptions.ValueError;
-import org.python.exceptions.TypeError;
-import org.python.exceptions.OverflowError;
 
 @org.python.Module(
         __doc__ = ""
@@ -23,26 +14,27 @@ public class __init__ extends org.python.types.Module {
     }
 
     @org.python.Attribute
-    public static Object pi = new Float(Math.PI);
+    public static org.python.Object pi = new org.python.types.Float(Math.PI);
+
     @org.python.Attribute
-    public static Object e = new Float(Math.E);
+    public static org.python.Object e = new org.python.types.Float(Math.E);
+
     // @org.python.Attribute
-    // public static Object inf = new Float(Double.POSITIVE_INFINITY);
+    // public static org.python.Object inf = new org.python.types.Float(Double.POSITIVE_INFINITY);
+
     // @org.python.Attribute
-    // public static Object nan = new Float(Double.NaN);
+    // public static org.python.Object nan = new org.python.types.Float(Double.NaN);
 
-
-
-    public static double tofloatvalue(Object v) {
-        if (v instanceof Float) {
-            return ((Float) v).value;
-        } else if (v instanceof Int) {
-            return (new Float(((Int) v).value)).value;
+    private static double toFloatValue(org.python.Object v) {
+        if (v instanceof org.python.types.Float) {
+            return ((org.python.types.Float) v).value;
+        } else if (v instanceof org.python.types.Int) {
+            return (new org.python.types.Float(((org.python.types.Int) v).value)).value;
         } else {
             if (org.Python.VERSION < 0x03060000) {
-                throw new TypeError("a float is required");
+                throw new org.python.exceptions.TypeError("a float is required");
             } else {
-                throw new TypeError("must be real number, not " + v.typeName());
+                throw new org.python.exceptions.TypeError("must be real number, not " + v.typeName());
             }
         }
     }
@@ -64,75 +56,63 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object erf(Object v) {
-        double result = math_erf.erf(tofloatvalue(v));
-        return new Float(result);
+    public static org.python.Object erf(org.python.Object v) {
+        double result = math_erf.erf(toFloatValue(v));
+        return new org.python.types.Float(result);
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object erfc(Object v) {
-        double result = math_erf.erfc(tofloatvalue(v));
-        return new Float(result);
+    public static org.python.Object erfc(org.python.Object v) {
+        double result = math_erf.erfc(toFloatValue(v));
+        return new org.python.types.Float(result);
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object gamma(Object v) {
-        double result = math_gamma.gamma(tofloatvalue(v));
-        return new Float(result);
+    public static org.python.Object gamma(org.python.Object v) {
+        double result = math_gamma.gamma(toFloatValue(v));
+        return new org.python.types.Float(result);
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object lgamma(Object v) {
-        double result = math_gamma.lgamma(tofloatvalue(v));
-        return new Float(result);
+    public static org.python.Object lgamma(org.python.Object v) {
+        double result = math_gamma.lgamma(toFloatValue(v));
+        return new org.python.types.Float(result);
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object expm1(Object v) {
+    public static org.python.Object expm1(org.python.Object v) {
 
         double result = 0.0;
-        result = Math.expm1(tofloatvalue(v));
+        result = Math.expm1(toFloatValue(v));
         if (Double.isInfinite(result)) {
-            throw new OverflowError("math range error");
+            throw new org.python.exceptions.OverflowError("math range error");
         } else {
-            return new Float(result);
+            return new org.python.types.Float(result);
         }
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object acos(Object v) {
-        Float r = new Float(Math.acos(tofloatvalue(v)));
+    public static org.python.Object acos(org.python.Object v) {
+        org.python.types.Float r = new org.python.types.Float(Math.acos(toFloatValue(v)));
         if (Double.isNaN(r.value)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
             return r;
         }
@@ -140,44 +120,36 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "arg"
-            }
+            args = {"arg"}
     )
-    public static Object cos(Object arg) {
-        double v = tofloatvalue(arg);
+    public static org.python.Object cos(org.python.Object arg) {
+        double v = toFloatValue(arg);
         if (exceptNaN(Math.cos(v), v)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
-            return new Float(Math.cos(v));
+            return new org.python.types.Float(Math.cos(v));
         }
     }
 
-
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object acosh(Object v) {
-        double y = tofloatvalue(v);
+    public static org.python.Object acosh(org.python.Object v) {
+        double y = toFloatValue(v);
         if (y < 1.0) {
-            throw new ValueError("math domain error");
-
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
             if (y < 2.) {
                 final double u = y - 1.;
                 double s = Math.sqrt(u * (2. + u));
-                return new Float(Math.log1p(u + s));
-
+                return new org.python.types.Float(Math.log1p(u + s));
             } else if (y < 0x1p27) {
                 final double u = 1. / y;
                 double t = Math.sqrt((1. + u) * (1. - u));
-                return new Float(Math.log(y * (1. + t)));
-
+                return new org.python.types.Float(Math.log(y * (1. + t)));
             } else {
-                return new Float(Math.log(y) + Math.log1p(2));
+                return new org.python.types.Float(Math.log(y) + Math.log1p(2));
             }
         }
     }
@@ -185,15 +157,12 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object asin(Object v) {
-
-        Float r = new Float(Math.asin(tofloatvalue(v)));
+    public static org.python.Object asin(org.python.Object v) {
+        org.python.types.Float r = new org.python.types.Float(Math.asin(toFloatValue(v)));
         if (Double.isNaN(r.value)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
             return r;
         }
@@ -202,12 +171,10 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "arg"
-            }
+            args = {"arg"}
     )
-    public static Object asinh(Object arg) {
-        double v = tofloatvalue(arg);
+    public static org.python.Object asinh(org.python.Object arg) {
+        double v = toFloatValue(arg);
         if (isnan(v) || isinf(v)) {
             return arg;
         }
@@ -233,37 +200,33 @@ public class __init__ extends org.python.types.Module {
             temp = Math.log1p(v + v * v / (1 + Math.sqrt(1 + v * v)));
         }
 
-        return new Float(sign ? -temp : temp);
+        return new org.python.types.Float(sign ? -temp : temp);
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "arg"
-            }
+            args = {"arg"}
     )
-    public static Object sin(Object arg) {
-        double v = tofloatvalue(arg);
+    public static org.python.Object sin(org.python.Object arg) {
+        double v = toFloatValue(arg);
         if (exceptNaN(Math.sin(v), v)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
-            return new Float(Math.sin(v));
+            return new org.python.types.Float(Math.sin(v));
         }
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object atan(Object v) {
+    public static org.python.Object atan(org.python.Object v) {
 
-        Float r = new Float(Math.atan(tofloatvalue(v)));
+        org.python.types.Float r = new org.python.types.Float(Math.atan(toFloatValue(v)));
         if (Double.isNaN(r.value)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
             return r;
         }
@@ -271,166 +234,159 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v",
-            "w"
-            }
+            args = {"v", "w"}
     )
-    public static Object atan2(Object v, Object w) {
-        return new Float(Math.atan(tofloatvalue(v) / tofloatvalue(w)));
+    public static org.python.Object atan2(org.python.Object v, org.python.Object w) {
+        return new org.python.types.Float(Math.atan(toFloatValue(v) / toFloatValue(w)));
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object atanh(Object v) {
-        double absy = Math.abs(tofloatvalue(v));
+    public static org.python.Object atanh(org.python.Object v) {
+        double absy = Math.abs(toFloatValue(v));
         if (absy >= 1.0) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
             double u = (absy + absy) / (1. - absy);
             double x = 0.5 * Math.log1p(u);
-            return new Float(Math.copySign(x, tofloatvalue(v)));
+            return new org.python.types.Float(Math.copySign(x, toFloatValue(v)));
         }
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "arg"
-            }
+            args = {"arg"}
     )
-    public static Object tan(Object arg) {
-        double v = tofloatvalue(arg);
+    public static org.python.Object tan(org.python.Object arg) {
+        double v = toFloatValue(arg);
         if (exceptNaN(Math.tan(v), v)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
-            return new Float(Math.tan(v));
+            return new org.python.types.Float(Math.tan(v));
         }
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object fsum(Object v) {
+    public static org.python.Object fsum(org.python.Object v) {
         if (v instanceof org.python.types.Str) {
-            tofloatvalue(v);
+            toFloatValue(v);
         }
-        if (!(v instanceof Tuple) && !(v instanceof List)) {
-            throw new TypeError("'" + v.typeName() + "' object is not iterable");
+        if (!(v instanceof org.python.types.Tuple) && !(v instanceof org.python.types.List)) {
+            throw new org.python.exceptions.TypeError("'" + v.typeName() + "' object is not iterable");
         } else {
             java.util.List l;
-            if (v instanceof Tuple) {
-                l = new java.util.ArrayList<Object>(((Tuple) v).value);
+            if (v instanceof org.python.types.Tuple) {
+                l = new java.util.ArrayList<org.python.Object>(((org.python.types.Tuple) v).value);
             } else {
-                l = new java.util.ArrayList<Object>(((List) v).value);
+                l = new java.util.ArrayList<org.python.Object>(((org.python.types.List) v).value);
             }
             BigDecimal sum = new BigDecimal(0);
             for (int i = 0; i < l.size(); i++) {
-                BigDecimal t = new BigDecimal(tofloatvalue(((Object) l.get(i))));
+                BigDecimal t = new BigDecimal(toFloatValue(((org.python.Object) l.get(i))));
                 sum = sum.add(t);
             }
-            return new Float(sum.doubleValue());
+            return new org.python.types.Float(sum.doubleValue());
         }
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object ceil(Object v) {
-        return new Int((int) Math.ceil(tofloatvalue(v)));
-    }
-
-
-    @org.python.Method(
-            __doc__ = "",
-            args = {
-            "arg"
-            }
-    )
-    public static Object cosh(Object arg) {
-        double v = tofloatvalue(arg);
-        if (exceptInf(Math.cosh(v), v)) {
-            throw new OverflowError("math range error");
-        }
-        return new Float(Math.cosh(v));
-    }
-
-    @org.python.Method(
-            __doc__ = "",
-            args = {
-            "arg"
-            }
-    )
-    public static Object sinh(Object arg) {
-        double v = tofloatvalue(arg);
-        if (exceptInf(Math.sinh(v), v)) {
-            throw new OverflowError("math range error");
-        }
-        return new Float(Math.sinh(v));
-    }
-
-    @org.python.Method(
-            __doc__ = "",
-            args = {
-            "arg"
-            }
-    )
-    public static Object tanh(Object arg) {
-        double v = tofloatvalue(arg);
-        if (exceptInf(Math.tanh(v), v)) {
-            throw new OverflowError("math range error");
-        }
-        return new Float(Math.tanh(v));
-    }
-
-
-    @org.python.Method(
-            __doc__ = "",
-            args = {
-            "arg"
-            }
-    )
-    public static Object sqrt(Object arg) {
-        double v = tofloatvalue(arg);
-        if (exceptNaN(Math.sqrt(v), v)) {
-            throw new ValueError("math domain error");
+    public static org.python.Object ceil(org.python.Object v) {
+        if (v instanceof org.python.types.Int || v instanceof org.python.types.Float) {
+            return new org.python.types.Int((int) Math.ceil(toFloatValue(v)));
         } else {
-            return new Float(Math.sqrt(v));
+            try {
+                org.python.Object[] args = new org.python.Object[1];
+                java.util.Map<java.lang.String, org.python.Object> kwargs = new java.util.HashMap<java.lang.String, org.python.Object>();
+                org.python.Object oper = v.__getattribute__("__ceil__");
+                return (org.python.Object) ((org.python.types.Method) oper).invoke(args, kwargs);
+            } catch (org.python.exceptions.AttributeError e) {
+                if (org.Python.VERSION < 0x03060000) {
+                    throw new org.python.exceptions.TypeError("a float is required");
+                } else {
+                    throw new org.python.exceptions.TypeError("must be real number, not " + v.typeName());
+                }
+            }
         }
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "arg1",
-            "arg2"
-            }
+            args = {"arg"}
     )
-    public static Object gcd(Object arg1, Object arg2) {
+    public static org.python.Object cosh(org.python.Object arg) {
+        double v = toFloatValue(arg);
+        if (exceptInf(Math.cosh(v), v)) {
+            throw new org.python.exceptions.OverflowError("math range error");
+        }
+        return new org.python.types.Float(Math.cosh(v));
+    }
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {"arg"}
+    )
+    public static org.python.Object sinh(org.python.Object arg) {
+        double v = toFloatValue(arg);
+        if (exceptInf(Math.sinh(v), v)) {
+            throw new org.python.exceptions.OverflowError("math range error");
+        }
+        return new org.python.types.Float(Math.sinh(v));
+    }
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {"arg"}
+    )
+    public static org.python.Object tanh(org.python.Object arg) {
+        double v = toFloatValue(arg);
+        if (exceptInf(Math.tanh(v), v)) {
+            throw new org.python.exceptions.OverflowError("math range error");
+        }
+        return new org.python.types.Float(Math.tanh(v));
+    }
+
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {"arg"}
+    )
+    public static org.python.Object sqrt(org.python.Object arg) {
+        double v = toFloatValue(arg);
+        if (exceptNaN(Math.sqrt(v), v)) {
+            throw new org.python.exceptions.ValueError("math domain error");
+        } else {
+            return new org.python.types.Float(Math.sqrt(v));
+        }
+    }
+
+
+    @org.python.Method(
+            __doc__ = "",
+            args = {"arg1", "arg2"}
+    )
+    public static org.python.Object gcd(org.python.Object arg1, org.python.Object arg2) {
         if (org.Python.VERSION < 0x03050000) {
             throw new org.python.exceptions.AttributeError("'module' object has no attribute 'gcd'");
         } else {
-            if (!(arg1 instanceof Int)) {
-                throw new TypeError("'" + arg1.typeName() + "' object cannot be interpreted as an integer");
-            } else if (!(arg2 instanceof Int)) {
-                throw new TypeError("'" + arg2.typeName() + "' object cannot be interpreted as an integer");
+            if (!(arg1 instanceof org.python.types.Int)) {
+                throw new org.python.exceptions.TypeError("'" + arg1.typeName() + "' object cannot be interpreted as an integer");
+            } else if (!(arg2 instanceof org.python.types.Int)) {
+                throw new org.python.exceptions.TypeError("'" + arg2.typeName() + "' object cannot be interpreted as an integer");
             } else {
-                long m = Math.abs(((Int) arg1).value);
-                long n = Math.abs(((Int) arg2).value);
+                long m = Math.abs(((org.python.types.Int) arg1).value);
+                long n = Math.abs(((org.python.types.Int) arg2).value);
                 long h = 1;
                 long p = m * n;
                 for (long i = 2; i < p; i++) {
@@ -438,98 +394,100 @@ public class __init__ extends org.python.types.Module {
                         h = i;
                     }
                 }
-                return new Int(h);
+                return new org.python.types.Int(h);
             }
         }
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object fabs(Object v) {
-        return new Float(Math.abs(tofloatvalue(v)));
+    public static org.python.Object fabs(org.python.Object v) {
+        return new org.python.types.Float(Math.abs(toFloatValue(v)));
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "a1",
-            "a2"
-            }
+            args = {"a1", "a2"}
     )
-    public static Object fmod(Object a1, Object a2) {
-        double v = tofloatvalue(a1);
-        double w = tofloatvalue(a2);
+    public static org.python.Object fmod(org.python.Object a1, org.python.Object a2) {
+        double v = toFloatValue(a1);
+        double w = toFloatValue(a2);
         if (isnan(v) || isnan(w)) {
-            return new Float(Double.NaN);
+            return new org.python.types.Float(Double.NaN);
         }
         if (isinf(w)) {
             return a1;
         }
         if (w == 0.0) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         }
         if (isinf(v) && w == 0.0) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         }
-        return new Float(v % w);
+        return new org.python.types.Float(v % w);
     }
 
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object exp(Object v) {
-        double r = Math.exp(tofloatvalue(v));
-        if (exceptInf(r, tofloatvalue(v))) {
-            throw new OverflowError("math range error");
+    public static org.python.Object exp(org.python.Object v) {
+        double r = Math.exp(toFloatValue(v));
+        if (exceptInf(r, toFloatValue(v))) {
+            throw new org.python.exceptions.OverflowError("math range error");
         } else {
-            return new Float(r);
+            return new org.python.types.Float(r);
         }
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object floor(Object v) {
-        return new Int((int) Math.floor(tofloatvalue(v)));
+    public static org.python.Object floor(org.python.Object v) {
+        if (v instanceof org.python.types.Int || v instanceof org.python.types.Float) {
+            return new org.python.types.Int((int) Math.floor(toFloatValue(v)));
+        } else {
+            try {
+                org.python.Object[] args = new org.python.Object[1];
+                java.util.Map<java.lang.String, org.python.Object> kwargs = new java.util.HashMap<java.lang.String, org.python.Object>();
+                org.python.Object oper = v.__getattribute__("__floor__");
+                return (org.python.Object) ((org.python.types.Method) oper).invoke(args, kwargs);
+            } catch (org.python.exceptions.AttributeError e) {
+                if (org.Python.VERSION < 0x03060000) {
+                    throw new org.python.exceptions.TypeError("a float is required");
+                } else {
+                    throw new org.python.exceptions.TypeError("must be real number, not " + v.typeName());
+                }
+            }
+        }
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            },
-            default_args = {
-            "base"
-            }
+            args = {"v"},
+            default_args = {"base"}
     )
-    public static Object log(Object v, Object base) {
+    public static org.python.Object log(org.python.Object v, org.python.Object base) {
         double b = 0.0;
-        if (base instanceof Float || base instanceof Int) {
-            b = tofloatvalue(base);
+        if (base instanceof org.python.types.Float || base instanceof org.python.types.Int) {
+            b = toFloatValue(base);
         } else if (base == null) {
             b = 0.0;
         }
         double doubleValue;
-        doubleValue = log(tofloatvalue(v));
-        return (b == 0.0) ? new Float(doubleValue) : new Float(applyLoggedBase(doubleValue, b));
+        doubleValue = log(toFloatValue(v));
+        return (b == 0.0) ? new org.python.types.Float(doubleValue) : new org.python.types.Float(applyLoggedBase(doubleValue, b));
     }
 
     private static double log(double v) {
         if (v <= 0.) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
             return Math.log(v);
         }
@@ -545,43 +503,37 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object log10(Object v) {
-        if (tofloatvalue(v) <= 0.) {
-            throw new ValueError("math domain error");
+    public static org.python.Object log10(org.python.Object v) {
+        if (toFloatValue(v) <= 0.) {
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
-            return new Float(Math.log10(tofloatvalue(v)));
+            return new org.python.types.Float(Math.log10(toFloatValue(v)));
         }
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object log2(Object v) {
-        if (tofloatvalue(v) <= 0.) {
-            throw new ValueError("math domain error");
+    public static org.python.Object log2(org.python.Object v) {
+        if (toFloatValue(v) <= 0.) {
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
-            return log(v, new Float(2));
+            return log(v, new org.python.types.Float(2));
         }
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object log1p(Object v) {
-        if (tofloatvalue(v) <= -1.) {
-            throw new ValueError("math domain error");
+    public static org.python.Object log1p(org.python.Object v) {
+        if (toFloatValue(v) <= -1.) {
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
-            return new Float(Math.log1p(tofloatvalue(v)));
+            return new org.python.types.Float(Math.log1p(toFloatValue(v)));
         }
     }
 
@@ -589,13 +541,10 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v",
-            "w"
-            }
+            args = {"v", "w"}
     )
-    public static Object copysign(Object v, Object w) {
-        return new Float(Math.copySign(tofloatvalue(v), tofloatvalue(w)));
+    public static org.python.Object copysign(org.python.Object v, org.python.Object w) {
+        return new org.python.types.Float(Math.copySign(toFloatValue(v), toFloatValue(w)));
     }
 
 
@@ -614,50 +563,46 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object modf(Object v) {
-        double r = tofloatvalue(v);
+    public static org.python.Object modf(org.python.Object v) {
+        double r = toFloatValue(v);
         if (isnan(r)) {
-            java.util.List temp = new java.util.ArrayList<Object>();
-            temp.add(new Float(r));
-            temp.add(new Float(r));
-            return new Tuple(temp);
+            java.util.List temp = new java.util.ArrayList<org.python.Object>();
+            temp.add(new org.python.types.Float(r));
+            temp.add(new org.python.types.Float(r));
+            return new org.python.types.Tuple(temp);
         }
         if (isinf(r)) {
             double first = 0.0;
             if (isninf(r)) {
                 first = -0.0;
             }
-            java.util.List temp = new java.util.ArrayList<Object>();
-            temp.add(new Float(first));
-            temp.add(new Float(r));
-            return new Tuple(temp);
+            java.util.List temp = new java.util.ArrayList<org.python.Object>();
+            temp.add(new org.python.types.Float(first));
+            temp.add(new org.python.types.Float(r));
+            return new org.python.types.Tuple(temp);
         }
         double w = r % (1.0);
         r -= w;
-        java.util.List temp = new java.util.ArrayList<Object>();
-        temp.add(new Float(w));
+        java.util.List temp = new java.util.ArrayList<org.python.Object>();
+        temp.add(new org.python.types.Float(w));
         if (r == -0d) {
-            temp.add(new Float(-r));
+            temp.add(new org.python.types.Float(-r));
         } else {
-            temp.add(new Float(r));
+            temp.add(new org.python.types.Float(r));
         }
-        return new Tuple(temp);
+        return new org.python.types.Tuple(temp);
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object frexp(Object v) {
+    public static org.python.Object frexp(org.python.Object v) {
         int exponent;
         double mantissa;
-        double x = tofloatvalue(v);
+        double x = toFloatValue(v);
         exponent = Math.getExponent(x);
         switch (exponent) {
 
@@ -681,26 +626,23 @@ public class __init__ extends org.python.types.Module {
                 }
                 break;
         }
-        java.util.List temp = new java.util.ArrayList<Object>();
-        temp.add(new Float(mantissa));
-        temp.add(new Float(exponent));
-        return new Tuple(temp);
+        java.util.List temp = new java.util.ArrayList<org.python.Object>();
+        temp.add(new org.python.types.Float(mantissa));
+        temp.add(new org.python.types.Int((int) exponent));
+        return new org.python.types.Tuple(temp);
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v",
-            "wObj"
-            }
+            args = {"v", "wObj"}
     )
-    public static Object ldexp(Object v, Object wObj) {
-        double r = tofloatvalue(v);
+    public static org.python.Object ldexp(org.python.Object v, org.python.Object wObj) {
+        double r = toFloatValue(v);
         double w = 0.0;
-        if (!(wObj instanceof Int)) {
-            throw new TypeError("Expected an int as second argument to ldexp.");
+        if (!(wObj instanceof org.python.types.Int)) {
+            throw new org.python.exceptions.TypeError("Expected an int as second argument to ldexp.");
         } else {
-            w = tofloatvalue(wObj);
+            w = toFloatValue(wObj);
         }
         if (w < Integer.MIN_VALUE) {
             w = Integer.MIN_VALUE;
@@ -709,94 +651,83 @@ public class __init__ extends org.python.types.Module {
         }
         double result = Math.scalb(r, (int) w);
         if (exceptInf(result, r)) {
-            throw new OverflowError("math range error");
+            throw new org.python.exceptions.OverflowError("math range error");
         } else {
-            return new Float(result);
+            return new org.python.types.Float(result);
         }
 
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v",
-            "w"
-            }
+            args = {"v", "w"}
     )
-    public static Object hypot(Object v, Object w) {
-        double x = tofloatvalue(v);
-        double y = tofloatvalue(w);
+    public static org.python.Object hypot(org.python.Object v, org.python.Object w) {
+        double x = toFloatValue(v);
+        double y = toFloatValue(w);
         double mag = Math.hypot(x, y);
         if (Double.isInfinite(mag) && !(Double.isInfinite(x) || Double.isInfinite(y))) {
-            throw new OverflowError("math range error");
+            throw new org.python.exceptions.OverflowError("math range error");
         }
-        return new Float(mag);
+        return new org.python.types.Float(mag);
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object radians(Object v) {
-        return new Float(Math.toRadians(tofloatvalue(v)));
+    public static org.python.Object radians(org.python.Object v) {
+        return new org.python.types.Float(Math.toRadians(toFloatValue(v)));
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object degrees(Object v) {
-        return new Float(Math.toDegrees(tofloatvalue(v)));
+    public static org.python.Object degrees(org.python.Object v) {
+        return new org.python.types.Float(Math.toDegrees(toFloatValue(v)));
     }
 
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "arg"
-            }
+            args = {"arg"}
     )
-    public static Object factorial(Object arg) {
+    public static org.python.Object factorial(org.python.Object arg) {
         double v = 0.0;
-        if (arg instanceof Float) {
-            v = ((Float) arg).value;
-        } else if (arg instanceof Int) {
-            v = (new Float(((Int) arg).value)).value;
+        if (arg instanceof org.python.types.Float) {
+            v = ((org.python.types.Float) arg).value;
+        } else if (arg instanceof org.python.types.Int) {
+            v = (new org.python.types.Float(((org.python.types.Int) arg).value)).value;
         } else {
-            throw new TypeError("an integer is required");
+            throw new org.python.exceptions.TypeError("an integer is required (got type "+ arg.typeName() + ")");
         }
         if ((v - ((int) v)) != 0.0) {
-            throw new ValueError("factorial() only accepts integral values");
+            throw new org.python.exceptions.ValueError("factorial() only accepts integral values");
         } else if (v <= 0.0) {
-            throw new ValueError("factorial() not defined for negative values");
+            throw new org.python.exceptions.ValueError("factorial() not defined for negative values");
         } else if (v == 0.0 || v == 1.0) {
-            return new Float(1);
+            return new org.python.types.Float(1);
         } else if (v < 0.0 || isnan(v) || isinf(v)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else if (!isIntegral(v)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         } else {
             long value = (long) v;
             BigInteger bi = new BigInteger(Long.toString(value));
-            for (long l = value - 1; l > 1; l--) {
-                bi = bi.multiply(new BigInteger(Long.toString(l)));
+            for (long l = value - 1; l > 1; l--) {         // this implementation doesn't work for large numbers
+                bi = bi.multiply(new BigInteger(Long.toString(l)));  // this needs work
             }
-            return new Int(bi.intValue());
+            return new org.python.types.Int(bi.intValue());
         }
     }
 
     /*@org.python.Method(
             __doc__ = "",
-            args = {
-            "arg"
-            }
+            args = {"arg"}
     )
-    public static Object trunc(Object arg) {
+    public static org.python.Object trunc(org.python.Object arg) {
         return arg.__trunc__();
     }*/
 
@@ -806,110 +737,101 @@ public class __init__ extends org.python.types.Module {
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object isnan(Object v) {
-        return new Bool(Double.isNaN(tofloatvalue(v)));
+    public static org.python.Object isnan(org.python.Object v) {
+        return new org.python.types.Bool(Double.isNaN(toFloatValue(v)));
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object isinf(Object v) {
-        return new Bool(Double.isInfinite(tofloatvalue(v)));
+    public static org.python.Object isinf(org.python.Object v) {
+        return new org.python.types.Bool(Double.isInfinite(toFloatValue(v)));
     }
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "v"
-            }
+            args = {"v"}
     )
-    public static Object isfinite(Object v) {
-        return new Bool(!(Double.isInfinite(tofloatvalue(v))));
+    public static org.python.Object isfinite(org.python.Object v) {
+        return new org.python.types.Bool(!(Double.isInfinite(toFloatValue(v))));
     }
 
 
     @org.python.Method(
             __doc__ = "",
-            args = {
-            "a1",
-            "a2"
-            }
+            args = {"a1", "a2"}
     )
-    public static Object pow(Object a1, Object a2) {
-        double v = tofloatvalue(a1);
-        double w = tofloatvalue(a2);
+    public static org.python.Object pow(org.python.Object a1, org.python.Object a2) {
+        double v = toFloatValue(a1);
+        double w = toFloatValue(a2);
         if (w == 0.0) {
-            return new Float(1);
+            return new org.python.types.Float(1);
         }
         if (v == 1.0) {
             return a1;
         }
         if (isnan(v) || isnan(w)) {
-            return new Float(Double.NaN);
+            return new org.python.types.Float(Double.NaN);
         }
         if (v == 0.0) {
             if (w == 0.0) {
-                return new Float(1);
+                return new org.python.types.Float(1);
             } else if (w > 0.0 || w == Double.POSITIVE_INFINITY) {
-                return new Float(0.0);
+                return new org.python.types.Float(0.0);
             } else {
-                throw new ValueError("math domain error");
+                throw new org.python.exceptions.ValueError("math domain error");
             }
         }
         if (v == Double.NEGATIVE_INFINITY) {
             if (w == Double.NEGATIVE_INFINITY) {
-                return new Float(0);
+                return new org.python.types.Float(0);
             }
             if (isinf(w)) {
-                return new Float(Double.POSITIVE_INFINITY);
+                return new org.python.types.Float(Double.POSITIVE_INFINITY);
             }
             if (w == 0.0) {
-                return new Float(1);
+                return new org.python.types.Float(1);
             }
             if (w > 0.0) {
                 if (isOdd(w)) {
-                    return new Float(Double.NEGATIVE_INFINITY);
+                    return new org.python.types.Float(Double.NEGATIVE_INFINITY);
                 }
-                return new Float(Double.POSITIVE_INFINITY);
+                return new org.python.types.Float(Double.POSITIVE_INFINITY);
             }
             if (isOdd(w)) {
-                return new Float(-0.0);
+                return new org.python.types.Float(-0.0);
             }
-            return new Float(0.0);
+            return new org.python.types.Float(0.0);
         }
         if (w == Double.NEGATIVE_INFINITY) {
             if (v < 0.0) {
                 if (v == -1.0) {
-                    return new Float(1.0);
+                    return new org.python.types.Float(1.0);
                 }
                 if (v < -1.0) {
-                    return new Float(0.0);
+                    return new org.python.types.Float(0.0);
                 }
-                return new Float(Double.POSITIVE_INFINITY);
+                return new org.python.types.Float(Double.POSITIVE_INFINITY);
             }
         }
         if (w == Double.POSITIVE_INFINITY) {
             if (v < 0.0) {
                 if (v == -1.0) {
-                    return new Float(1.0);
+                    return new org.python.types.Float(1.0);
                 }
                 if (v < -1.0) {
-                    return new Float(Double.POSITIVE_INFINITY);
+                    return new org.python.types.Float(Double.POSITIVE_INFINITY);
                 }
-                return new Float(0.0);
+                return new org.python.types.Float(0.0);
             }
         }
         if (v < 0.0 && !isIntegral(w)) {
-            throw new ValueError("math domain error");
+            throw new org.python.exceptions.ValueError("math domain error");
         }
-        return new Float(Math.pow(v, w));
+        return new org.python.types.Float(Math.pow(v, w));
     }
 
     private static boolean isOdd(double v) {
