@@ -701,7 +701,7 @@ public class __init__ extends org.python.types.Module {
         } else if (arg instanceof org.python.types.Int) {
             v = (new org.python.types.Float(((org.python.types.Int) arg).value)).value;
         } else {
-            throw new org.python.exceptions.TypeError("an integer is required (got type "+ arg.typeName() + ")");
+            throw new org.python.exceptions.TypeError("an integer is required (got type " + arg.typeName() + ")");
         }
         if ((v - ((int) v)) != 0.0) {
             throw new org.python.exceptions.ValueError("factorial() only accepts integral values");
